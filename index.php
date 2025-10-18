@@ -4,25 +4,21 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/includes/bootstrap.php';
 
-// Inputs
 $query = trim($_GET['q'] ?? '');
-$genreId = isset($_GET['genre']) ? (int)$_GET['genre'] : null; // на будущее, если добавите селектор жанров
+$genreId = isset($_GET['genre']) ? (int)$_GET['genre'] : null;
 
 $filters = [
   'query' => $query !== '' ? $query : null,
   'genre_id' => $genreId ?: null,
 ];
 
-// Data
 $genres = fetch_genres($pdo);
 $books = fetch_books($pdo, $filters);
 $user  = current_user($pdo);
 
-// Разбиваем на 2 подборки под секции (если нет специальных флагов в БД)
 $popularBooks = array_slice($books, 0, 12);      // «Популярные книги недели»
 $recommendedBooks = array_slice($books, 12, 12); // «Мы рекомендуем»
 
-// Утилиты рендера
 function book_bg_class(int $i): string { return $i % 2 === 0 ? 'bg-card-1' : 'bg-card-2'; }
 function book_chip_value(array $book): string {
   // Если есть рейтинг/оценка в данных — используйте его. Иначе — год или тире.
