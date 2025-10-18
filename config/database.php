@@ -6,6 +6,7 @@ const DB_HOST = '127.0.0.1';
 const DB_PORT = 3306;
 const DB_NAME = 'readlyst';
 const DB_USER = 'root';
+
 const DB_PASSWORD = 'markor123';
 
 function get_pdo(): PDO

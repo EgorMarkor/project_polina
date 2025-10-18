@@ -42,394 +42,138 @@ function author_line(array $book): string {
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-  <meta charset="UTF-8"/>
-  <meta name="viewport" content="width=device-width, initial-scale=1"/>
-  <title>Readlyst — Bootstrap + rem</title>
-
-  <!-- Bootstrap 5 -->
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"/>
-
-  <style>
-    /* Базовый ресет */
-    *,*::before,*::after{box-sizing:border-box}
-    body{margin:0;background:#fff;color:#0f172a;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif}
-
-    /* Типографика (адаптивный шаг) */
-    :root{
-      --c-green:#183b32;
-      --c-ink:#0f172a;
-      --c-ink-50: rgba(15,23,42,.5);
-      --c-ink-75: rgba(15,23,42,.75);
-      --c-muted:#5a617c;
-      --c-card-1:#a65840;
-      --c-card-2:#ff291d;
-
-      /* радиусы/величины из макета в rem (16px = 1rem) */
-      --r-card: .705rem;       /* 11.28px */
-      --r-hero: 1.128rem;      /* 18.04px */
-      --r-pill: 1.691rem;      /* 27.06px */
-
-      --fs-hero: 5.09rem;      /* 81.43px */
-      --fs-sec-title: 1.41rem; /* 22.55px */
-      --fs-book-title: .99rem; /* 15.79px */
-      --lh-book-title: 1.41rem;/* 22.55px */
-      --fs-book-meta: .845rem; /* 13.53px */
-
-      --chip-py: .282rem;      /* 4.51px */
-      --chip-px: 1.057rem;     /* 16.91px */
-      --chip-top: .845rem;     /* 13.53px */
-      --chip-left: .423rem;    /* 6.77px */
-
-      --btn-read-w: 6.84rem;   /* 109.38px */
-      --btn-read-h: 1.973rem;  /* 31.57px */
-    }
-
-    /* Шапка */
-    .nav-wrap{
-      box-shadow: 0 0 1.875rem rgba(0,0,0,.05);
-      position: sticky; top: 0; z-index: 1030; background:#fff;
-    }
-    .brand-title{font-weight:700; letter-spacing:-.05em; font-size:1.466rem; line-height:1.76rem}
-    .catalog-btn, .login-btn{
-      border-radius: 1000rem; height: 2.875rem; /* 46px */
-      display:flex; align-items:center; gap:.5rem; padding:0 1rem;
-      font-weight:700; font-size:.875rem;
-    }
-    .catalog-btn{ background:#0f172a; color:#fff; }
-    .login-btn{ background:var(--c-green); color:#fff; }
-    .search-pill{
-      height:2.875rem; border-radius:1000rem; background:#f2f3f2;
-      display:flex; align-items:center; gap:.625rem; padding-inline: .938rem; /* 15px */
-      flex:1 1 auto;
-    }
-
-    /* Hero */
-    .hero{
-      background:#e1cc97; border-radius:var(--r-hero); position:relative; overflow:hidden;
-    }
-    .hero__left{max-width:29.9rem} /* 478.1px */
-    .hero__title{font-size:var(--fs-hero); line-height:1; letter-spacing:-.05em; color:#102721; font-weight:700}
-    .hero__sub{color:var(--c-ink-75); font-size:.875rem; line-height:1.41rem}
-
-    /* Декорные маски в hero (оставлены как позиционированные элементы) */
-    .hero-mask{position:absolute; top:0; height:auto}
-    .hero-mask.m0{left:27rem}   /* 432px */
-    .hero-mask.m1{left:27rem}
-    .hero-mask.m2{left:30.25rem}/* 484px */
-
-    /* Секция */
-    .sec-title{font-weight:700; font-size:var(--fs-sec-title); letter-spacing:-.05em}
-
-    /* Карточка книги */
-    .book{
-      display:flex; flex-direction:column; gap:.695rem; /* 11.12px */
-    }
-    .book__thumb{
-      position:relative; border-radius:var(--r-card); overflow:hidden;
-    }
-    .book__thumb .ratio > img{object-fit:cover}
-    .book__thumb::after{
-      content:""; position:absolute; inset:0; background:#0f172a; opacity:.03; pointer-events:none;
-    }
-    .book__chip{
-      position:absolute; top:var(--chip-top); left:var(--chip-left);
-      background:rgba(15,23,42,.5); backdrop-filter: blur(.353rem); /* ~5.64px */
-      border-radius:100rem; padding: var(--chip-py) var(--chip-px);
-      display:flex; align-items:center; gap:.07rem;
-    }
-    .book__chip span{color:#fff; font-size:var(--fs-book-meta); font-weight:500; line-height:1.125rem}
-
-    .book__title{font-weight:700; font-size:var(--fs-book-title); line-height:var(--lh-book-title); letter-spacing:-.035rem; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
-    .book__meta{color:var(--c-muted); font-size:var(--fs-book-meta); line-height:1.06rem}
-    .book__actions{display:flex; align-items:center; gap:.705rem}
-    .book__read{
-      width:var(--btn-read-w); height:var(--btn-read-h); border-radius:var(--r-pill);
-      background:var(--c-green); display:flex; align-items:center; justify-content:center;
-      color:#fff; font-weight:600; font-size:var(--fs-book-meta); letter-spacing:.015rem;
-    }
-    .book__badge{
-      border: .093rem solid rgba(175,178,191,.5); /* 1.49px */
-      border-radius:.279rem; /* 4.47px */
-      padding:.187rem .372rem; /* 2.98px 5.96px */
-      color:#afb2bf; font-family:Arial, sans-serif; font-weight:500; font-size:.916rem; line-height:1.21rem;
-    }
-
-    /* Цвета превью */
-    .bg-card-1{background:var(--c-card-1)}
-    .bg-card-2{background:var(--c-card-2)}
-
-    /* Футер-карточка */
-    .about-card{
-      border:1px solid #d9e3e8; border-radius:1rem;
-    }
-    .about-text{color:var(--c-muted); font-size:.75rem; line-height:1.125rem}
-
-    /* Адаптивные отступы секций */
-    .section{padding-block: 2.5rem}
-    @media (min-width: 992px){ .section{padding-block: 3rem} }
-
-    /* Небольшой горизонтальный скролл для «ленты» при узких ширинах */
-    .x-scroll{overflow-x:auto; overflow-y:visible; -webkit-overflow-scrolling:touch}
-    .x-scroll .row{flex-wrap:nowrap}
-    .x-gap{gap:1rem}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Readlyst — книжный каталог</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/home/style.css">
+    <link rel="stylesheet" href="/assets/css/app.css">
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
 </head>
 <body>
-
-  <!-- NAVBAR -->
-  <div class="nav-wrap py-2">
-    <div class="container-xxl">
-      <div class="d-flex align-items-center gap-3">
-        <div class="d-flex align-items-center gap-2 me-2">
-          <img src="assets/img/product-icons2.svg" alt="" style="width:2.165rem;height:2.165rem"/>
-          <div class="brand-title">Readlyst</div>
-        </div>
-
-        <a class="catalog-btn text-decoration-none" href="#popular">
-          <img src="assets/img/frame-2131330034-10.svg" alt="" style="width:1rem;height:1rem"> Каталог
-        </a>
-
-        <!-- Поиск интегрирован с GET ?q= -->
-        <form class="search-pill flex-grow-1" method="get" action="/">
-          <img src="assets/img/vector0.svg" alt="" style="width:1rem;height:1rem">
-          <input type="search" name="q" value="<?= htmlspecialchars($query, ENT_QUOTES) ?>" class="form-control border-0 bg-transparent" placeholder="Поиск по названию, автору или жанру"/>
-        </form>
-
-        <?php if ($user): ?>
-          <div class="d-flex align-items-center gap-3 ms-auto">
-            <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:2.75rem;height:2.75rem;">
-              <?= strtoupper(mb_substr($user['first_name'], 0, 1)) ?>
+<header class="nav-wrap">
+    <div class="container py-3">
+        <div class="d-flex align-items-center gap-3 flex-wrap">
+            <div class="d-flex align-items-center gap-2">
+                <img src="/home/product-icons1.svg" alt="Readlyst" width="36" height="36">
+                <span class="brand-title">Readlyst</span>
             </div>
-            <div class="d-flex flex-column">
-              <strong><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name'], ENT_QUOTES) ?></strong>
-              <div class="d-flex gap-2">
-                <?php if (is_admin($pdo)): ?>
-                  <a class="nav-link p-0" href="/admin/index.php">Админ-панель</a>
-                <?php endif; ?>
-                <a class="nav-link p-0 text-danger" href="/logout.php">Выйти</a>
-              </div>
-            </div>
-          </div>
-        <?php else: ?>
-          <div class="ms-auto d-flex gap-2">
-            <a class="login-btn text-decoration-none" href="/login.php">
-              <img src="assets/img/frame-21313300330.svg" alt="" style="height:1rem"> Войти
+            <a href="#catalog" class="catalog-btn d-flex align-items-center">
+                <img src="/home/frame-2131330034-10.svg" alt="Каталог" width="16" height="16">
+                Каталог
             </a>
-            <a class="login-btn text-decoration-none" style="background:#0f172a" href="/register.php">Регистрация</a>
-          </div>
-        <?php endif; ?>
-      </div>
-    </div>
-  </div>
-
-  <!-- HERO -->
-  <section class="section">
-    <div class="container-xxl">
-      <div class="hero p-4 p-md-5">
-        <!-- маски (как в исходнике, но в rem-контейнере) -->
-        <img src="assets/img/mask-group0.svg" class="hero-mask m0 d-none d-lg-block" alt="">
-        <img src="assets/img/mask-group1.svg" class="hero-mask m1 d-none d-lg-block" alt="">
-        <img src="assets/img/mask-group2.svg" class="hero-mask m2 d-none d-lg-block" alt="">
-
-        <div class="row align-items-center">
-          <div class="col-12 col-lg-6">
-            <div class="hero__left d-flex flex-column gap-3">
-              <div class="d-flex align-items-center gap-2">
-                <img src="assets/img/product-icons0.svg" alt="" style="width:1.78rem;height:1.78rem">
-                <div class="fw-bold" style="letter-spacing:-.05em">Readlyst</div>
-              </div>
-              <h1 class="hero__title mb-0">Открой новую главу</h1>
-              <p class="hero__sub mb-0">
-                Собирайте книги, составляйте списки и читайте без отвлечений. Readlyst упорядочит ваше чтение сам.
-              </p>
-            </div>
-          </div>
-          <div class="col-12 col-lg-6"><!-- правую половину оставляем под декоративные маски --></div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- СЕКЦИЯ: Популярные книги недели -->
-  <section id="popular" class="section">
-    <div class="container-xxl">
-      <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="sec-title mb-0">Популярные книги недели</h2>
-      </div>
-
-      <!-- Горизонтальная лента на узких, сетка — на >= lg -->
-      <div class="x-scroll d-lg-none">
-        <div class="row x-gap">
-          <?php if (empty($popularBooks)): ?>
-            <div class="col-auto text-muted">Ничего не найдено.</div>
-          <?php else: ?>
-            <?php foreach ($popularBooks as $i => $book): ?>
-              <div class="col-auto">
-                <article class="book" style="width:11.47rem"><!-- 183.56px -->
-                  <div class="book__thumb <?= book_bg_class($i) ?>">
-                    <div class="ratio ratio-2x3 position-relative">
-                      <img src="<?= htmlspecialchars(book_cover_url($book), ENT_QUOTES) ?>" alt="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>">
+            <form class="search-pill flex-grow-1" method="get" action="/">
+                <img src="/home/vector0.svg" alt="Поиск" width="16" height="16">
+                <input type="search" name="q" value="<?= htmlspecialchars($query, ENT_QUOTES) ?>" class="form-control border-0 bg-transparent" placeholder="Поиск по названию, автору или жанру">
+            </form>
+            <?php if ($user): ?>
+                <div class="ms-auto d-flex align-items-center gap-3">
+                    <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center" style="width:44px;height:44px;">
+                        <?= strtoupper(mb_substr($user['first_name'], 0, 1)) ?>
                     </div>
-                    <div class="book__chip">
-                      <img src="assets/img/mask-group3.svg" alt="" style="width:1.125rem;height:1.125rem">
-                      <span><?= htmlspecialchars(book_chip_value($book), ENT_QUOTES) ?></span>
+                    <div class="d-flex flex-column">
+                        <strong><?= htmlspecialchars($user['first_name'] . ' ' . $user['last_name'], ENT_QUOTES) ?></strong>
+                        <div class="d-flex gap-2">
+                            <?php if (is_admin($pdo)): ?>
+                                <a class="nav-link p-0" href="/admin/index.php">Админ-панель</a>
+                            <?php endif; ?>
+                            <a class="nav-link p-0 text-danger" href="/logout.php">Выйти</a>
+                        </div>
                     </div>
-                  </div>
-                  <div>
-                    <div class="book__title" title="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>"><?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?></div>
-                    <div class="book__meta"><?= author_line($book) ?></div>
-                  </div>
-                  <div class="book__actions">
-                    <a class="book__read text-decoration-none" href="/book.php?id=<?= (int)$book['id'] ?>">Читать</a>
-                  </div>
-                </article>
-              </div>
-            <?php endforeach; ?>
-          <?php endif; ?>
+                </div>
+            <?php else: ?>
+                <div class="ms-auto d-flex gap-2">
+                    <a class="login-btn" href="/login.php">Войти</a>
+                    <a class="login-btn" style="background:#0f172a" href="/register.php">Регистрация</a>
+                </div>
+            <?php endif; ?>
         </div>
-      </div>
-
-      <!-- Сетка для ноутбуков и шире -->
-      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3 d-none d-lg-flex">
-        <?php if (empty($popularBooks)): ?>
-          <div class="col text-muted">Ничего не найдено.</div>
-        <?php else: ?>
-          <?php foreach ($popularBooks as $i => $book): ?>
-            <div class="col">
-              <article class="book">
-                <div class="book__thumb <?= book_bg_class($i) ?>">
-                  <div class="ratio ratio-2x3 position-relative">
-                    <img src="<?= htmlspecialchars(book_cover_url($book), ENT_QUOTES) ?>" alt="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>">
-                  </div>
-                  <div class="book__chip">
-                    <img src="assets/img/mask-group3.svg" alt="" style="width:1.125rem;height:1.125rem">
-                    <span><?= htmlspecialchars(book_chip_value($book), ENT_QUOTES) ?></span>
-                  </div>
-                </div>
-                <div>
-                  <div class="book__title" title="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>"><?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?></div>
-                  <div class="book__meta"><?= author_line($book) ?></div>
-                </div>
-                <div class="book__actions">
-                  <a class="book__read text-decoration-none" href="/book.php?id=<?= (int)$book['id'] ?>">Читать</a>
-                </div>
-              </article>
-            </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
     </div>
-  </section>
+</header>
 
-  <!-- СЕКЦИЯ: Мы рекомендуем -->
-  <section class="section">
-    <div class="container-xxl">
-      <div class="d-flex align-items-center justify-content-between mb-3">
-        <h2 class="sec-title mb-0">Мы рекомендуем</h2>
-      </div>
+<main>
+    <section class="py-5">
+        <div class="container">
+            <?php if ($flash): ?>
+                <div class="flash-message mb-4"><?= htmlspecialchars($flash, ENT_QUOTES) ?></div>
+            <?php endif; ?>
 
-      <!-- На узких — горизонтальная лента -->
-      <div class="x-scroll d-lg-none">
-        <div class="row x-gap">
-          <?php if (empty($recommendedBooks)): ?>
-            <div class="col-auto text-muted">Пока ничего не рекомендовано.</div>
-          <?php else: ?>
-            <?php foreach ($recommendedBooks as $i => $book): ?>
-              <div class="col-auto">
-                <article class="book" style="width:11.47rem">
-                  <div class="book__thumb <?= book_bg_class($i) ?>">
-                    <div class="ratio ratio-2x3 position-relative">
-                      <img src="<?= htmlspecialchars(book_cover_url($book), ENT_QUOTES) ?>" alt="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>">
+            <div class="hero p-4 p-lg-5 d-flex flex-column flex-lg-row gap-4 align-items-center">
+                <div class="hero__left">
+                    <div class="hero__chip text-uppercase">Онлайн каталог</div>
+                    <h1 class="hero__title">Читайте и открывайте новое</h1>
+                    <p class="hero__sub">Readlyst — ваш универсальный помощник по поиску, сортировке и изучению книг. Добавляйте новые издания, выбирайте любимых авторов и открывайте новые жанры.</p>
+                    <div class="d-flex gap-3 flex-wrap">
+                        <a href="#catalog" class="book__read text-decoration-none">К каталогу</a>
+                        <span class="badge-muted">Сотни книг внутри</span>
                     </div>
-                    <div class="book__chip">
-                      <img src="assets/img/mask-group12.svg" alt="" style="width:1.125rem;height:1.125rem">
-                      <span><?= htmlspecialchars(book_chip_value($book), ENT_QUOTES) ?></span>
-                    </div>
-                  </div>
-                  <div>
-                    <div class="book__title" title="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>"><?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?></div>
-                    <div class="book__meta"><?= author_line($book) ?></div>
-                  </div>
-                  <div class="book__actions">
-                    <a class="book__read text-decoration-none" href="/book.php?id=<?= (int)$book['id'] ?>">Читать</a>
-                  </div>
-                </article>
-              </div>
-            <?php endforeach; ?>
-          <?php endif; ?>
+                </div>
+                <div class="position-relative">
+                    <img src="/home/_30-300.png" class="hero-mask m0 d-none d-lg-block" alt="">
+                    <img src="/home/div29.png" alt="Read more" class="img-fluid rounded-4" style="max-width:280px;">
+                </div>
+            </div>
         </div>
-      </div>
+    </section>
 
-      <!-- На ноутбуках — сетка -->
-      <div class="row row-cols-2 row-cols-sm-3 row-cols-md-4 row-cols-lg-6 g-3 d-none d-lg-flex">
-        <?php if (empty($recommendedBooks)): ?>
-          <div class="col text-muted">Пока ничего не рекомендовано.</div>
-        <?php else: ?>
-          <?php foreach ($recommendedBooks as $i => $book): ?>
-            <div class="col">
-              <article class="book">
-                <div class="book__thumb <?= book_bg_class($i) ?>">
-                  <div class="ratio ratio-2x3 position-relative">
-                    <img src="<?= htmlspecialchars(book_cover_url($book), ENT_QUOTES) ?>" alt="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>">
-                  </div>
-                  <div class="book__chip">
-                    <img src="assets/img/mask-group12.svg" alt="" style="width:1.125rem;height:1.125rem">
-                    <span><?= htmlspecialchars(book_chip_value($book), ENT_QUOTES) ?></span>
-                  </div>
-                </div>
-                <div>
-                  <div class="book__title" title="<?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?>"><?= htmlspecialchars($book['title'] ?? '', ENT_QUOTES) ?></div>
-                  <div class="book__meta"><?= author_line($book) ?></div>
-                </div>
-                <div class="book__actions">
-                  <a class="book__read text-decoration-none" href="/book.php?id=<?= (int)$book['id'] ?>">Читать</a>
-                </div>
-              </article>
+    <section id="catalog" class="pb-5">
+        <div class="container">
+            <div class="d-flex flex-column flex-lg-row gap-3 justify-content-between align-items-lg-center mb-4">
+                <h2 class="sec-title m-0">Каталог книг</h2>
+                <form class="d-flex gap-3 flex-wrap align-items-center" method="get" action="/">
+                    <input type="hidden" name="q" value="<?= htmlspecialchars($query, ENT_QUOTES) ?>">
+                    <label class="text-muted small mb-0" for="genre">Сортировка по жанрам</label>
+                    <select id="genre" class="form-select rounded-pill" name="genre" onchange="this.form.submit()" style="min-width:220px">
+                        <option value="">Все жанры</option>
+                        <?php foreach ($genres as $genre): ?>
+                            <option value="<?= (int)$genre['id'] ?>" <?= $genreId === (int)$genre['id'] ? 'selected' : '' ?>><?= htmlspecialchars($genre['name'], ENT_QUOTES) ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </form>
             </div>
-          <?php endforeach; ?>
-        <?php endif; ?>
-      </div>
-    </div>
-  </section>
 
-  <!-- ABOUT / Футер-карточка -->
-  <section class="section pt-0">
-    <div class="container-xxl">
-      <div class="about-card p-4 p-md-5">
-        <div class="row gy-4 align-items-start">
-          <div class="col-12 col-lg-6">
-            <div class="d-flex align-items-center gap-2 mb-3">
-              <img src="assets/img/product-icons1.svg" alt="" style="width:2.165rem;height:2.165rem">
-              <div class="fw-bold brand-title m-0">Readlyst</div>
-            </div>
-            <p class="about-text mb-0">
-              Readlyst — платформа, где собраны отзывы, описания и характеристики книг. Сервис помогает быстро оценить впечатления
-              читателей и понять, стоит ли брать книгу, без регистрации и лишних шагов.
-            </p>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-3">
-            <div class="fw-bold mb-3">О компании</div>
-            <ul class="list-unstyled d-flex flex-column gap-2">
-              <li><a href="/terms.html" class="link-secondary text-decoration-none">Пользовательское соглашение</a></li>
-              <li><a href="/confident/index.html" class="link-secondary text-decoration-none">Политика конфиденциальности</a></li>
-              <li><a href="/support.html" class="link-secondary text-decoration-none">Поддержка</a></li>
-            </ul>
-          </div>
-
-          <div class="col-12 col-md-6 col-lg-3">
-            <div class="fw-bold mb-3">Мы в соц.сетях</div>
-            <div class="d-flex align-items-center gap-3">
-              <img src="assets/img/tg-797-d-2292-svg0.svg" alt="Telegram" style="width:2rem;height:2rem">
-              <img src="assets/img/vk-f-5-f-9-bacc-svg0.svg" alt="VK" style="width:2rem;height:2rem">
-            </div>
-          </div>
+            <?php if (empty($books)): ?>
+                <div class="alert alert-light border">По заданным условиям ничего не найдено. Попробуйте изменить запрос.</div>
+            <?php else: ?>
+                <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
+                    <?php foreach ($books as $book): ?>
+                        <div class="col">
+                            <article class="book book-card h-100">
+                                <div class="book__thumb bg-card-1">
+                                    <div class="ratio ratio-2x3">
+                                        <img src="<?= htmlspecialchars(book_cover_url($book), ENT_QUOTES) ?>" alt="<?= htmlspecialchars($book['title'], ENT_QUOTES) ?>" class="img-fluid">
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="book__title" title="<?= htmlspecialchars($book['title'], ENT_QUOTES) ?>"><?= htmlspecialchars($book['title'], ENT_QUOTES) ?></div>
+                                    <div class="book__meta"><?= htmlspecialchars($book['author_name'], ENT_QUOTES) ?><br><?= htmlspecialchars($book['genre_name'], ENT_QUOTES) ?> · <?= htmlspecialchars(format_year($book['release_year'] !== null ? (int)$book['release_year'] : null), ENT_QUOTES) ?></div>
+                                </div>
+                                <div class="book__actions">
+                                    <a class="book__read text-decoration-none" href="/book.php?id=<?= (int)$book['id'] ?>">Подробнее</a>
+                                </div>
+                            </article>
+                        </div>
+                    <?php endforeach; ?>
+                </div>
+            <?php endif; ?>
         </div>
-      </div>
-    </div>
-  </section>
+    </section>
+</main>
 
-  <!-- Bootstrap JS -->
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+<footer class="py-5 bg-light mt-auto">
+    <div class="container d-flex flex-column flex-md-row justify-content-between gap-3">
+        <div>
+            <strong class="brand-title">Readlyst</strong>
+            <p class="text-muted small mb-0">Онлайн сервис книжного каталога с удобным управлением и доступом для администраторов и пользователей.</p>
+        </div>
+        <div class="text-muted small">
+            <div><a href="/register.php" class="text-muted">Регистрация</a></div>
+            <div><a href="/login.php" class="text-muted">Авторизация</a></div>
+            <div><a href="/confident/index.html" class="text-muted">Политика конфиденциальности</a></div>
+        </div>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
