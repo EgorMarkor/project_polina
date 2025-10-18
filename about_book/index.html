@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Readlyst — адаптив</title>
 
-  <!-- Tailwind CDN -->
+  
   <script src="https://cdn.tailwindcss.com/3.2.0"></script>
   <script>
     tailwind.config = {
@@ -22,7 +22,7 @@
     }
   </script>
 
-  <!-- Базовый reset + небольшая типографика -->
+  
   <style>
     *,*::before,*::after{box-sizing:border-box}
     html{font-size:16px}
@@ -35,7 +35,7 @@
 </head>
 <body class="min-h-screen">
 
-  <!-- HEADER -->
+  
   <header class="sticky top-0 z-50 bg-white shadow-[0_0_1.875rem_rgba(0,0,0,.05)]">
     <div class="container max-w-screen-2xl">
       <div class="flex items-center gap-3 py-3 md:py-4">
@@ -62,7 +62,7 @@
           </div>
         </div>
       </div>
-      <!-- mobile search -->
+      
       <div class="md:hidden pb-3">
         <div class="flex items-center bg-[#f2f3f2] rounded-pill h-11 px-4 gap-2">
           <img src="vector0.svg" class="w-4 h-4" alt=""><span class="text-ink/80 text-sm">Поиск…</span>
@@ -74,9 +74,9 @@
   <main class="pb-16">
     <div class="container max-w-screen-2xl">
 
-      <!-- HERO / карточка книги -->
+      
       <section class="mt-8 grid lg:grid-cols-12 gap-8">
-        <!-- Превью -->
+        
         <div class="lg:col-span-4">
           <div class="rounded-2xl overflow-hidden shadow-soft bg-white">
             <div class="[aspect-ratio:2/3] relative">
@@ -86,7 +86,7 @@
           </div>
         </div>
 
-        <!-- Метаданные -->
+        
         <div class="lg:col-span-8 flex flex-col gap-6">
           <div class="flex flex-col gap-4">
             <div class="flex flex-wrap items-center gap-3 text-sm">
@@ -132,14 +132,14 @@
         </div>
       </section>
 
-      <!-- С этой книгой читают -->
+      
       <section class="mt-12">
         <h2 class="text-2xl md:text-[1.41rem] font-bold tracking-tight mb-6">С этой книгой читают</h2>
 
-        <!-- На мобайле — горизонтальная лента, на ноутбуке — сетка -->
+        
         <div class="md:hidden -mx-4 px-4 overflow-x-auto">
           <div class="flex gap-4">
-            <!-- Карточка -->
+            
             <article class="w-[11.5rem] flex flex-col gap-3">
               <div class="relative rounded-xl overflow-hidden bg-card2">
                 <div class="[aspect-ratio:2/3] relative">
@@ -160,14 +160,14 @@
               </div>
             </article>
 
-            <!-- дублируй карточки по образцу -->
+            
           </div>
         </div>
 
-        <!-- GRID для ноутбуков -->
+        
         <div class="hidden md:grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-4">
-          <!-- Компонент карточки -->
-          <!-- 1 -->
+          
+          
           <article class="flex flex-col gap-3">
             <div class="relative rounded-xl overflow-hidden bg-card2">
               <div class="[aspect-ratio:2/3] relative">
@@ -188,7 +188,7 @@
             </div>
           </article>
 
-          <!-- 2 -->
+          
           <article class="flex flex-col gap-3">
             <div class="relative rounded-xl overflow-hidden bg-card2">
               <div class="[aspect-ratio:2/3] relative">
@@ -206,11 +206,11 @@
             <button class="bg-green text-white h-[1.975rem] px-3 rounded-[27.06px] text-[.845rem] font-semibold">Читать</button>
           </article>
 
-          <!-- …Добавь остальные карточки по образцу -->
+          
         </div>
       </section>
 
-      <!-- Характеристики + Описание -->
+      
       <section class="mt-12 grid lg:grid-cols-12 gap-10">
         <div class="lg:col-span-4">
           <h3 class="text-base font-bold mb-4">Характеристики</h3>
@@ -243,11 +243,11 @@
         </div>
       </section>
 
-      <!-- От автора -->
+      
       <section class="mt-12">
         <h2 class="text-2xl md:text-[1.41rem] font-bold tracking-tight mb-6">От автора</h2>
         <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-7 gap-4">
-          <!-- повторяющиеся карточки автора — тот же компонент, что выше -->
+          
           <article class="flex flex-col gap-3">
             <div class="relative rounded-xl overflow-hidden bg-card2">
               <div class="[aspect-ratio:2/3] relative">
@@ -268,11 +268,11 @@
             </div>
           </article>
 
-          <!-- …остальные карточки по образцу -->
+          
         </div>
       </section>
 
-      <!-- Отзывы -->
+      
       <section class="mt-12">
         <div class="grid lg:grid-cols-12 gap-8">
           <div class="lg:col-span-7">
@@ -293,7 +293,7 @@
               </div>
             </div>
 
-            <!-- Один отзыв -->
+            
             <div class="mt-6 space-y-4">
               <div class="flex items-start gap-3">
                 <div class="w-8 h-8 rounded-full bg-[#c5c5c5] grid place-items-center text-white text-sm">Е</div>
@@ -329,7 +329,7 @@
         </button>
       </section>
 
-      <!-- FOOTER CARD -->
+      
       <section class="mt-12">
         <div class="rounded-2xl border border-[#d9e3e8] p-6 md:p-8">
           <div class="grid md:grid-cols-3 gap-10 items-start">
